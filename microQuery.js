@@ -1,5 +1,5 @@
 /*!
- * microQuery.js – A minimal jQuery-compatible utility library
+ * microQuery.js v1.0.1 – A minimal jQuery-compatible utility library
  * (c) 2024–2025 MyAppz.com | MIT License | Not affiliated with jQuery
  */
 
@@ -37,7 +37,62 @@
       toggleClass(className) {
         elements.forEach(el => el.classList.toggle(className));
         return api;
-      }
+      },
+      text(content) {
+        if (content === undefined) {
+          return elements[0]?.textContent;
+        }
+        elements.forEach(el => el.textContent = content);
+        return api;
+      },
+
+      html(content) {
+        if (content === undefined) {
+          return elements[0]?.innerHTML;
+        }
+        elements.forEach(el => el.innerHTML = content);
+        return api;
+      },
+
+      attr(name, value) {
+        if (value === undefined) {
+          return elements[0]?.getAttribute(name);
+        }
+        elements.forEach(el => el.setAttribute(name, value));
+        return api;
+      },
+
+      val(value) {
+        if (value === undefined) {
+          return elements[0]?.value;
+        }
+        elements.forEach(el => {
+          if ('value' in el) el.value = value;
+        });
+        return api;
+      },
+
+      css(property, value) {
+        if (value === undefined) {
+          return getComputedStyle(elements[0])[property];
+        }
+        elements.forEach(el => {
+          el.style[property] = value;
+        });
+        return api;
+      },
+
+      prop(name, value) {
+        if (value === undefined) {
+          return elements[0]?.[name];
+        }
+        elements.forEach(el => {
+          el[name] = value;
+        });
+        return api;
+      },
+
+
     };
 
     // Make it array-like so you can do $('#id')[0]
