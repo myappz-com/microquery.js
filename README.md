@@ -58,6 +58,14 @@ $('.btn');         // by class
 $('#output');      // by ID
 ```
 
+### Core traversal and selection
+
+```js
+$('#container').find('.item').addClass('highlight');
+$('#parent').children('.child').addClass('x'); 
+$('.a').add($('#b')).addClass('highlight');
+```
+
 ### Event Listener
 
 ```js
@@ -86,6 +94,9 @@ $('#output').html('<strong>Hi</strong>');
 ```js
 $('#link').attr('href', 'https://myappz.com');
 $('#check').prop('checked', true);
+
+$('#el').data('key', 'value');         
+const val = $('#el').data('key');  
 ```
 
 ### CSS
