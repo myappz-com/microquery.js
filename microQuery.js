@@ -1,5 +1,5 @@
 /*!
- * microQuery.js v1.0.4 - A minimal jQuery-compatible utility library
+ * microQuery.js v1.0.5 - A minimal jQuery-compatible utility library
  * (c) 2024-2025 MyAppz.com | MIT License | Not affiliated with jQuery
  */
 
@@ -47,8 +47,14 @@
         return $(newEls);
       },
       index(el) {
+        if (el === undefined) {
+          const first = elements[0];
+          if (!first || !first.parentNode) return -1;
+          return Array.from(first.parentNode.children).indexOf(first);
+        }
         return elements.indexOf(el);
       },
+
 
       // Event handling
 
