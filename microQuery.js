@@ -1,5 +1,5 @@
 /*!
- * microQuery.js v1.0.3 - A minimal jQuery-compatible utility library
+ * microQuery.js v1.0.4 - A minimal jQuery-compatible utility library
  * (c) 2024-2025 MyAppz.com | MIT License | Not affiliated with jQuery
  */
 
@@ -52,8 +52,21 @@
 
       // Event handling
 
-      on(event, handler) {
-        elements.forEach(el => el.addEventListener(event, handler));
+      on(event, selectorOrHandler, maybeHandler) {
+        if (typeof selectorOrHandler === 'function') {
+          elements.forEach(el => el.addEventListener(event, selectorOrHandler));
+        } else {
+          const selector = selectorOrHandler;
+          const handler = maybeHandler;
+
+          elements.forEach(el => {
+            el.addEventListener(event, function (e) {
+              if (e.target && e.target.matches(selector)) {
+                handler.call(e.target, e);
+              }
+            });
+          });
+        }
         return api;
       },
 
