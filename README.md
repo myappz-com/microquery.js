@@ -3,7 +3,7 @@
 # microQuery.js
 A minimal, jQuery-compatible helper library for modern JavaScript projects
 
-What is it?
+### What is it?
 microQuery.js is a tiny (~1KB gzipped) JavaScript utility that brings back the simplicity and convenience of jQuery’s $() syntax — for faster coding, cleaner code, and fewer keystrokes.
 
 It covers just the essentials: DOM selection, events, class manipulation, content updates, and $.ajax() — all chainable, all modern, with none of jQuery’s overhead or legacy features.
