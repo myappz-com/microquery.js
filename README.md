@@ -20,13 +20,15 @@ microQuery.js is a lightweight JavaScript utility (~1KB gzipped) that mimics the
 ## 📦 Features
 
 - DOM ready shorthand (`$(fn)`)
-- Core traversal and selection  (`.find()`, `.children()`, `.add()`, `.index()`)
+- Core traversal and selection  (`.find()`, `.children(), `.siblings()`, `.add()`, `.index()`)
 - Class manipulation (`.addClass()`, `.removeClass()`, `.toggleClass()`)
 - Event binding (`.on()`)
 - Form value handling (`.val()`)
 - Text and HTML helpers (`.text()`, `.html()`)
 - Attributes and properties (`.attr()`, `.prop()`, `.data()`)
 - Inline styles (`.css()`)
+- Basic visibility (`.show()`, `.hide()`)
+- DOM insertion (`.append()`, `.prepend()`)
 - AJAX (`$.ajax()`)
 
 ---
