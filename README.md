@@ -37,6 +37,31 @@ microQuery doesn’t try to replicate jQuery — it simply offers a minimal set 
 
 ---
 
+### 🚫 Not Supported (Intentionally)
+
+> microQuery keeps it minimal on purpose — if you need these, use jQuery or plain JS.
+
+* `.click()`, `.focus()`, `.submit()`, etc. (use `.on("event", fn)` instead)
+* `.animate()`, `.fadeIn()`, `.slideUp()` (use CSS transitions)
+* `.closest()`, `.parents()`, `.next()`, `.prev()` and other complex traversal
+* `.remove()`, `.empty()` (use `el.remove()` or `el.innerHTML = ""`)
+* Event namespaces, `.trigger()`, `.queue()`, and plugins
+* Full jQuery compatibility — not the goal!
+
+---
+
+### 📦 When to Use microQuery
+
+| Use case                                                | Recommended Tool |
+| ------------------------------------------------------- | ---------------- |
+| Basic DOM manipulation with cleaner syntax              | ✅ microQuery     |
+| You just want `$().on().addClass().html()`              | ✅ microQuery     |
+| You're using modern JS but want less typing             | ✅ microQuery     |
+| You need jQuery plugins or advanced traversal           | ❌ Use jQuery     |
+| You’re doing performance-critical, framework-level work | ❌ Use plain JS   |
+
+---
+
 ## 🔧 Usage
 
 Include the script:
@@ -129,23 +154,59 @@ $.ajax({
 });
 ```
 
+### Chaining
+
+```js
+$('.btn')
+  .addClass('primary')
+  .text('Save')
+  .on('click', saveData);
+```
+
+### Iterate Over Elements
+
+```js
+$('.item').each(function (el, i) {
+  console.log(i, el.textContent);
+});
+```
+
+### Toggle Visibility (via CSS)
+
+```js
+$('.modal').css('display', 'none');
+$('.btn').on('click', () => {
+  $('.modal').css('display', 'block');
+});
+```
+
+### Combine Selectors
+
+```js
+$('.btn, .link').addClass('interactive');
+```
+
 ---
 
 
 ### Example Usage
 ```
+// Example Usage
 $(function () {
   $('.btn').on('click', function () {
     $('.btn').toggleClass('highlight');
 
     $.ajax({
+      method: 'POST',
       url: '/api/data',
+      data: { id: 123 },
       success: data => {
-        $('#output')[0].textContent = data.message;
+        $('#output').text(data.message);
       }
     });
   });
 });
+
 ```
 
 ## 🔒 License
