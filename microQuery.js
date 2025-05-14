@@ -1,5 +1,5 @@
 /*!
- * microQuery.js v1.0.5 - A minimal jQuery-compatible utility library
+ * microQuery.js v1.0.6 - A minimal jQuery-compatible utility library
  * (c) 2024-2025 MyAppz.com | MIT License | Not affiliated with jQuery
  */
 
@@ -17,7 +17,9 @@
 
     const elements = typeof selector === 'string'
       ? document.querySelectorAll(selector)
-      : [selector];
+      : (selector instanceof NodeList || Array.isArray(selector))
+        ? Array.from(selector)
+        : [selector];
 
     const api = {
 
@@ -30,6 +32,7 @@
         });
         return $(found);
       },
+
       children(selector) {
         const all = [];
         elements.forEach(el => {
@@ -38,6 +41,23 @@
         });
         return $(all);
       },
+      siblings(selector) {
+        const all = [];
+        elements.forEach(el => {
+          const parent = el?.parentElement;
+          if (!parent) return;
+
+          const siblings = Array.from(parent.children).filter(sib => sib !== el);
+          if (selector) {
+            all.push(...siblings.filter(s => s.matches(selector)));
+          } else {
+            all.push(...siblings);
+          }
+        });
+        return $(all);
+      },
+
+
       add(other) {
         const newEls = [...elements];
         const toAdd = other.length !== undefined ? other : [other];
@@ -76,20 +96,49 @@
         return api;
       },
 
+
+      ready(callback) {
+        if (elements[0] === document) {
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', callback);
+          } else {
+            callback();
+          }
+        }
+        return api;
+      },
+
+
+
       // Class manipulation
 
       addClass(className) {
-        elements.forEach(el => el.classList.add(className));
+        elements.forEach(el => {
+          if (el?.classList?.add) {
+            el.classList.add(className);
+          }
+        });
         return api;
       },
+
       removeClass(className) {
-        elements.forEach(el => el.classList.remove(className));
+        elements.forEach(el => {
+          if (el?.classList?.remove) {
+            el.classList.remove(className);
+          }
+        });
         return api;
       },
+
       toggleClass(className) {
-        elements.forEach(el => el.classList.toggle(className));
+        elements.forEach(el => {
+          if (el?.classList?.toggle) {
+            el.classList.toggle(className);
+          }
+        });
         return api;
       },
+
 
       // Content manipulation
 
@@ -148,14 +197,67 @@
 
       // Styling
       css(property, value) {
-        if (value === undefined) {
-          return getComputedStyle(elements[0])[property];
+        if (typeof property === 'object') {
+          // Handle object-based style setting
+          elements.forEach(el => {
+            if (!el?.style) return;
+            for (const key in property) {
+              el.style[key] = property[key];
+            }
+          });
+          return api;
         }
+
+        if (value === undefined) {
+          const el = elements[0];
+          return el?.nodeType === 1 ? getComputedStyle(el)[property] : undefined;
+        }
+
         elements.forEach(el => {
-          el.style[property] = value;
+          if (el?.style) el.style[property] = value;
         });
         return api;
       },
+
+      prepend(content) {
+        elements.forEach(el => {
+          if (typeof content === 'string') {
+            el.insertAdjacentHTML('afterbegin', content);
+          } else if (content instanceof Element) {
+            el.insertBefore(content.cloneNode(true), el.firstChild);
+          }
+        });
+        return api;
+      },
+
+      append(content) {
+        elements.forEach(el => {
+          if (typeof content === 'string') {
+            el.insertAdjacentHTML('beforeend', content);
+          } else if (content instanceof Element) {
+            el.appendChild(content.cloneNode(true));
+          }
+        });
+        return api;
+      },
+
+
+      /* Visibility */
+
+      hide() {
+        elements.forEach(el => {
+          el.style.display = 'none';
+        });
+        return api;
+      },
+
+      show() {
+        elements.forEach(el => {
+          el.style.display = '';
+        });
+        return api;
+      },
+
 
     };
 
